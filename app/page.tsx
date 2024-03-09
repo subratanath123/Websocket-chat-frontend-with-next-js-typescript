@@ -26,11 +26,13 @@ export default function App() {
     const [state, setState] = useState<{
 
         chatMaximized: boolean,
-        showUserList: boolean
+        showUserList: boolean,
+        fetchUserList: boolean
 
     }>({
         chatMaximized: false,
-        showUserList: false
+        showUserList: false,
+        fetchUserList: false
     });
 
     const [open, setOpen] = React.useState(false);
@@ -51,7 +53,7 @@ export default function App() {
                     !state.chatMaximized && !state.showUserList && session && session.user
                     &&
                     <div style={style} onClick={(e) => {
-                        setState({...state, showUserList: true})
+                        setState({...state, showUserList: true, fetchUserList: true})
                     }}>
                         <Fab variant="extended">
                             Live chat
@@ -60,12 +62,21 @@ export default function App() {
                 }
 
                 {
+                    state.fetchUserList
+                    &&
                     <ChatUserList
+                        session={session}
                         onClick={toggleDrawer}
                         showUserList={state.showUserList}
-                        onDrawerClose={() => {setState({...state, showUserList: false})}}
-                        onChatMaximized={() => {setState({...state,  showUserList: false, chatMaximized: true})}}
-                        onChatMinimized={() => {setState({...state,  showUserList: false, chatMaximized: false})}}
+                        onDrawerClose={() => {
+                            setState({...state, showUserList: false})
+                        }}
+                        onChatMaximized={() => {
+                            setState({...state, showUserList: false, chatMaximized: true})
+                        }}
+                        onChatMinimized={() => {
+                            setState({...state, showUserList: false, chatMaximized: false})
+                        }}
                     />
                 }
 

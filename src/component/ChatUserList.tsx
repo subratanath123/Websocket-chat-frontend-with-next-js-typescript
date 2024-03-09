@@ -1,9 +1,9 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
 import {User} from "@/constants/Cosntants";
 import ChatWindow from "@/component/ChatWindow";
-import {useSession} from "next-auth/react";
 import axios from "axios";
+import {Session} from "next-auth";
 
 type ChatUserListProps = {
     showUserList: boolean
@@ -11,6 +11,7 @@ type ChatUserListProps = {
     onDrawerClose: () => void;
     onChatMaximized: () => void;
     onChatMinimized: () => void;
+    session: Session
 };
 
 const style = {
@@ -26,10 +27,9 @@ const ChatUserList: React.FC<ChatUserListProps> = ({
                                                        onChatMaximized,
                                                        onChatMinimized,
                                                        onDrawerClose,
-                                                       onClick
+                                                       onClick,
+                                                       session
                                                    }) => {
-
-    const {data: session} = useSession();
 
     const [state, setState] = useState<{
         userList: User[],
@@ -41,13 +41,20 @@ const ChatUserList: React.FC<ChatUserListProps> = ({
     });
 
     const handleUserChatInitiate = (e: React.MouseEvent<HTMLDivElement>, chatWithUser: User) => {
+
+        console.log(chatWithUser);
+
         setState(prevState => ({...state, chatUserWindowList: [...prevState.chatUserWindowList, chatWithUser]}));
-        onChatMaximized(true);
+        onChatMaximized();
     };
 
     useEffect(() => {
         axios
-            .get('http://localhost:8000/supportUserList')
+            .get('http://localhost:8000/v1/api/supportUserList', {
+            headers: {
+                'Authorization': 'Bearer ' + session?.access_token
+            }
+        })
             .then((response) => {
 
                 setState({

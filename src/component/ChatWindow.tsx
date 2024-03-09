@@ -18,7 +18,7 @@ interface ChatWindowProps {
 const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, onCloseChat}) => {
     const {data: session} = useSession();
     const selfEmail = session?.user?.email;
-    const token = session?.user?.access_token;
+    const token = session?.access_token;
     const myPicture = session?.picture;
 
     const [state, setState] = useState<{
