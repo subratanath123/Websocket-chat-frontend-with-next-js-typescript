@@ -1,5 +1,6 @@
 import NextAuth from "next-auth/next"
 import GoogleProvider from "next-auth/providers/google"
+import axios from "axios";
 // import { cookies } from 'next/headers'
 
 const handler = NextAuth({
@@ -26,7 +27,17 @@ const handler = NextAuth({
                 // console.log(token);
             }
 
-            // cookies().set('Authorization', `Bearer ${token.access_token}`)
+            const response = await axios.get(`http://localhost:8000/v1/api/user/authenticated`, {
+                headers: {
+                    'Authorization': `Bearer ${session?.access_token}`
+                }
+            });
+
+            if (response.status >= 400) {
+                console.log("error on api call");
+            } else {
+                console.log("success api call");
+            }
 
             return session
         }

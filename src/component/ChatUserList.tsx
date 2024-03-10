@@ -106,7 +106,7 @@ const ChatUserList: React.FC<ChatUserListProps> = ({
                                                     style={{width: "45px", height: "100%"}}
                                                 />
                                             </ListItemIcon>
-                                            <ListItemText primary={`${user.userName}(${user.designation})`}/>
+                                            <ListItemText primary={`${user.userName}(${user.email})`}/>
                                         </ListItemButton>
                                     </ListItem>
                                 ))}
