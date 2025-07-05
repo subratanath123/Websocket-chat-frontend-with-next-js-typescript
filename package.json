@@ -24,6 +24,7 @@
     "react-scroll-to-bottom": "^4.2.0",
     "react-stomp": "^5.1.0",
     "react-stomp-hooks": "^2.2.1",
+    "react-top-loading-bar": "^3.0.2",
     "sockjs": "^0.3.24",
     "websocket": "^1.0.34",
     "ws": "^8.16.0"

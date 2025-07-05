@@ -6,7 +6,8 @@ import axios from "axios";
 import {Session} from "next-auth";
 
 type ChatUserListProps = {
-    showUserList: boolean
+    projectId: string;
+    showUserList: boolean;
     onClick: (newOpen: boolean) => void;
     onDrawerClose: () => void;
     onChatMaximized: () => void;
@@ -23,6 +24,7 @@ const style = {
 };
 
 const ChatUserList: React.FC<ChatUserListProps> = ({
+                                                       projectId,
                                                        showUserList,
                                                        onChatMaximized,
                                                        onChatMinimized,
@@ -120,6 +122,7 @@ const ChatUserList: React.FC<ChatUserListProps> = ({
                         return (
                             <ChatWindow
                                 key={`chatWindowList-${chatUser.email}`}
+                                projectId={projectId}
                                 chatWithUser={chatUser}
                                 onCloseChat={user => {
                                     handleCloseChat(user)

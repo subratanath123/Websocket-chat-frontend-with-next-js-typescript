@@ -152,9 +152,6 @@ export default function Profile() {
                     </MDBBtn>
                 </form>
             </MDBContainer>
-
-            <ChatService/>
-
             <Footer/>
         </>
     );

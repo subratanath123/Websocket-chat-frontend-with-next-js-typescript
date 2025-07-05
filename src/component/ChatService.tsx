@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Fab from "@mui/material/Fab";
-import { MDBContainer } from "mdb-react-ui-kit";
-import { StompSessionProvider } from "react-stomp-hooks";
+import {MDBContainer} from "mdb-react-ui-kit";
+import {StompSessionProvider} from "react-stomp-hooks";
 import ChatUserList from "@/component/ChatUserList";
-import { useSession } from "next-auth/react";
+import {useSession} from "next-auth/react";
 
 const fabStyle = {
     position: "fixed",
@@ -16,8 +16,8 @@ const fabStyle = {
 
 const SOCKET_URL = "http://localhost:8000/websocket";
 
-export default function ChatService() {
-    const { data: session } = useSession();
+export default function ChatService({projectId}: { projectId: string | undefined }) {
+    const {data: session} = useSession();
 
     const [state, setState] = useState<{
         chatMaximized: boolean;
@@ -40,7 +40,7 @@ export default function ChatService() {
                     <div
                         style={fabStyle}
                         onClick={() =>
-                            setState({ ...state, showUserList: true, fetchUserList: true })
+                            setState({...state, showUserList: true, fetchUserList: true})
                         }
                     >
                         <Fab variant="extended">Live chat</Fab>
@@ -49,14 +49,15 @@ export default function ChatService() {
 
                 {state.fetchUserList && (
                     <ChatUserList
+                        projectId={projectId || ''}
                         session={session}
                         onClick={toggleDrawer}
                         showUserList={state.showUserList}
                         onDrawerClose={() =>
-                            setState({ ...state, showUserList: false })
+                            setState({...state, showUserList: false})
                         }
                         onChatMaximized={() =>
-                            setState({ ...state, showUserList: false, chatMaximized: true })
+                            setState({...state, showUserList: false, chatMaximized: true})
                         }
                         onChatMinimized={() =>
                             setState({

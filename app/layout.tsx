@@ -21,8 +21,9 @@ export default function RootLayout({children}: {
         <Providers>
             <html lang="en">
             <body className={roboto.className}>
-
-            {children}
+            <div className="page-wrapper">
+                {children}
+            </div>
 
             </body>
             </html>

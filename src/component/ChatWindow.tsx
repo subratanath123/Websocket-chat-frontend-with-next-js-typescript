@@ -1,6 +1,6 @@
 "use client";
 
-import React, {Suspense, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {MDBCard, MDBCardBody, MDBCol, MDBRow} from "mdb-react-ui-kit";
 import ChatHeader from "@/component/ChatHeader";
 import MessageRow from "@/component/MessageRow";
@@ -9,16 +9,15 @@ import Fab from "@mui/material/Fab";
 import {ChatMessage, User} from "@/constants/Cosntants";
 import {useStompClient, useSubscription} from "react-stomp-hooks";
 import {useSession} from "next-auth/react";
-import {Skeleton} from "@mui/material";
-import {Session} from "next-auth";
 import axios from "axios";
 
 interface ChatWindowProps {
     chatWithUser: User,
+    projectId: string,
     onCloseChat: (user: User) => void;
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, onCloseChat}) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, projectId, onCloseChat}) => {
     const {data: session} = useSession();
     const selfEmail = session?.user?.email;
     const token = session?.access_token;
@@ -27,6 +26,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, onCloseChat}) => {
     const [state, setState] = useState<{
 
         chatMaximized: boolean,
+        chatBotResponding: boolean,
         showUserList: boolean,
         fetchedData: boolean;
         messages: ChatMessage[],
@@ -35,6 +35,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, onCloseChat}) => {
     }>({
         chatMaximized: false,
         showUserList: false,
+        chatBotResponding: false,
         fetchedData: false,
         messages: [],
         text: ''
@@ -88,8 +89,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, onCloseChat}) => {
             setState((prevState) => ({...prevState, text: ''}));
 
             stompClient.publish({
-                destination: '/app/user-message-' + chatWithUser.email, body: chatMessageString
+                destination: '/app/user-message-' + chatWithUser.email + '-' + projectId, body: chatMessageString
             })
+
+            if (chatWithUser.email.startsWith('chatbot')) {
+                setState((prevState) => ({...prevState, chatBotResponding: true}));
+            }
         }
     }
 
@@ -99,6 +104,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, onCloseChat}) => {
             let chatMessage: ChatMessage = JSON.parse(message.body);
 
             setState((prevState) => ({...prevState, messages: [...prevState.messages, chatMessage]}));
+
+            if (chatMessage.senderEmail.startsWith("chatbot")) {
+                setState((prevState) => ({...prevState, chatBotResponding: false}));
+            }
 
             scrollToBottom();
         }
@@ -131,13 +140,27 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, onCloseChat}) => {
                         </div>
 
                         {
+                            state.chatBotResponding &&
+                            <div className="flex justify-start items-center">
+                                <div className="typing-bubble px-3 py-2 bg-gray-200 rounded-xl flex space-x-1">
+
+                                    <span className="text-gray-500 text-sm">Agent is responding </span>
+                                    <span className="dot"/>
+                                    <span className="dot delay-1"/>
+                                    <span className="dot delay-2"/>
+
+                                </div>
+                            </div>
+                        }
+
+                        {
                             !state.fetchedData
                                 ? (
                                     <>
-                                        <div >
+                                        <div>
                                             <span class="spinner-border spinner-border-sm" role="status"
                                                   aria-hidden="true"></span>
-                                               &nbsp; Loading...
+                                            &nbsp; Loading...
                                         </div>
                                     </>
                                 )
@@ -161,6 +184,34 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, onCloseChat}) => {
                     </MDBCardBody>
                 </MDBCard>
             </MDBCol>
+
+            <style jsx>{`
+                .dot {
+                    width: 8px;
+                    height: 8px;
+                    background-color: #555;
+                    border-radius: 50%;
+                    display: inline-block;
+                    animation: bounce 1.4s infinite ease-in-out both;
+                }
+
+                .delay-1 {
+                    animation-delay: 0.2s;
+                }
+
+                .delay-2 {
+                    animation-delay: 0.4s;
+                }
+
+                @keyframes bounce {
+                    0%, 80%, 100% {
+                        transform: translateY(0);
+                    }
+                    40% {
+                        transform: translateY(-6px);
+                    }
+                }
+            `}</style>
         </MDBRow>
     );
 };
