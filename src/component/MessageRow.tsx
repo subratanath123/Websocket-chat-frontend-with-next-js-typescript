@@ -1,4 +1,5 @@
 import React from 'react';
+import Linkify from "linkify-react";
 
 type MessageRowProps = {
     message: string;
@@ -11,6 +12,10 @@ const MessageRow: React.FC<MessageRowProps> = ({
                                                    message,
                                                    avatarLink = "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
                                                }) => {
+    const options = {
+        target: '_blank',
+        rel: 'noopener noreferrer'
+    };
 
     return (
         <div className={`d-flex flex-row ${isMe ? "justify-content-start" : "justify-content-end"} mb-4`}>
@@ -29,7 +34,7 @@ const MessageRow: React.FC<MessageRowProps> = ({
                 style={{borderRadius: "15px", backgroundColor: "#fbfbfb"}}
             >
                 <p className="small mb-0">
-                    {message}
+                    <Linkify options={options}>{message}</Linkify>;
                 </p>
             </div>
 

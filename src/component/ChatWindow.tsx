@@ -10,6 +10,8 @@ import {ChatMessage, User} from "@/constants/Cosntants";
 import {useStompClient, useSubscription} from "react-stomp-hooks";
 import {useSession} from "next-auth/react";
 import axios from "axios";
+import Linkify from 'linkify-react';
+
 
 interface ChatWindowProps {
     chatWithUser: User,
@@ -59,8 +61,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, projectId, onClose
 
     useEffect(() => {
         const fetchData = async () => {
+
+            const messageFetchUrl = !projectId
+                ? `http://localhost:8000/v1/api/get-recent-messages/${chatWithUser.email}`
+                : `http://localhost:8000/v1/api/get-recent-messages/${chatWithUser.email}/${projectId}`
+
             try {
-                const response = await axios.get(`http://localhost:8000/v1/api/get-recent-messages/${chatWithUser.email}`, {
+                const response = await axios.get(messageFetchUrl, {
                     headers: {
                         'Authorization': `Bearer ${session?.access_token}`
                     }
@@ -132,7 +139,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, projectId, onClose
                                 &&
                                 state.messages.map((message, index) => {
                                     return <MessageRow key={`message ${index}`}
-                                                       avatarLink={message.senderEmail == selfEmail ? myPicture : chatWithUser.picture}
+                                                       avatarLink={message.senderEmail == selfEmail ? myPicture
+                                                           : message.senderEmail.startsWith("chatbot")
+                                                               ? "https://cdn-icons-png.flaticon.com/512/11306/11306137.png"
+                                                               : chatWithUser.picture}
                                                        message={message.content}
                                                        isMe={message.senderEmail == selfEmail}/>;
                                 })

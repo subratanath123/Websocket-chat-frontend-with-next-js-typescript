@@ -103,7 +103,9 @@ const ChatUserList: React.FC<ChatUserListProps> = ({
                                         <ListItemButton onClick={(e) => handleUserChatInitiate(e, user)}>
                                             <ListItemIcon>
                                                 <img
-                                                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
+                                                    src={user.userName.startsWith("chatbot")
+                                                        ? "https://cdn-icons-png.flaticon.com/512/11306/11306137.png"
+                                                        : user.picture}
                                                     alt="avatar 1"
                                                     style={{width: "45px", height: "100%"}}
                                                 />
