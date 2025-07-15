@@ -6,6 +6,15 @@ export type User = {
     picture: string,
 };
 
+import NextAuth from "next-auth";
+
+declare module "next-auth" {
+    interface Session {
+        access_token?: string;
+        picture?: any;
+    }
+}
+
 export type ChatMessage = {
     content: string,
     senderEmail: string,

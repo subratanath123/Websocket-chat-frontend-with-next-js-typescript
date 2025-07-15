@@ -15,7 +15,7 @@ type ChatUserListProps = {
     session: Session
 };
 
-const style = {
+const style:React.CSSProperties = {
     position: 'absolute',
     bottom: 16,
     right: 16,

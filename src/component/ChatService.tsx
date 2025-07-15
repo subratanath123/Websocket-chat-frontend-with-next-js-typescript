@@ -7,7 +7,7 @@ import {StompSessionProvider} from "react-stomp-hooks";
 import ChatUserList from "@/component/ChatUserList";
 import {useSession} from "next-auth/react";
 
-const fabStyle = {
+const fabStyle : React.CSSProperties = {
     position: "fixed",
     bottom: 16,
     right: 16,
@@ -47,7 +47,7 @@ export default function ChatService({projectId}: { projectId: string | undefined
                     </div>
                 )}
 
-                {state.fetchUserList && (
+                {state.fetchUserList && session && (
                     <ChatUserList
                         projectId={projectId || ''}
                         session={session}

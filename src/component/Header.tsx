@@ -30,7 +30,7 @@ export default function Header() {
                 >
                     <MDBIcon icon='bars' fas/>
                 </MDBNavbarToggler>
-                <MDBCollapse navbar show={showNav}>
+                <MDBCollapse navbar>
                     <MDBNavbarNav>
                         <MDBNavbarItem>
                             <MDBNavbarLink active aria-current='page' href='#'>

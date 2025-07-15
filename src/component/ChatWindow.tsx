@@ -49,7 +49,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, projectId, onClose
     // Function to scroll the card to the bottom
     const scrollToBottom = () => {
         if (cardRef.current) {
-            cardRef.current.scrollTop = cardRef.current.scrollHeight;
+            // todo:: Need to add auto scroll
+            // cardRef.current.scrollTop = cardRef.current.scrollHeight;
         }
     };
 
@@ -168,7 +169,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({chatWithUser, projectId, onClose
                                 ? (
                                     <>
                                         <div>
-                                            <span class="spinner-border spinner-border-sm" role="status"
+                                            <span className="spinner-border spinner-border-sm" role="status"
                                                   aria-hidden="true"></span>
                                             &nbsp; Loading...
                                         </div>

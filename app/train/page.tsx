@@ -43,7 +43,9 @@ export default function Profile() {
 
         formData.append('webSite', state.webSite);
         formData.append('description', state.description);
-        formData.append('file', state.file);
+        if (state.file) {
+            formData.append('file', state.file);
+        }
 
         axios.post('http://localhost:8000/api/openai/train', formData, {
             headers: {
@@ -85,6 +87,14 @@ export default function Profile() {
         });
     };
 
+    const handleInputTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+
+        setState({
+            ...state,
+            [e.target.name]: e.target.value
+        });
+    };
+
 // @ts-ignore
     return (
         <>
@@ -118,7 +128,7 @@ export default function Profile() {
                                       id='form1Example1'
                                       label='Website address'
                                       name="webSite"
-                                      onChange={(e) => handleTextChange(e)}
+                                      onChange={(e) => handleInputTextChange(e)}
                             />
 
                         </MDBTabsPane>
