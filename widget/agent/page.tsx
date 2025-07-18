@@ -1,0 +1,13 @@
+"use client";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import ChatService from "@/ChatService";
+
+const config = (window as any).__CHAT_WIDGET_CONFIG__ || {};
+
+const container = document.createElement("div");
+container.id = "chat-widget-root";process.env.NODE_ENV
+document.body.appendChild(container);
+
+const root = ReactDOM.createRoot(container);
+root.render(<ChatService projectId={config.projectId}/>);

@@ -36,7 +36,7 @@ export default function ChatService({projectId}: { projectId: string | undefined
     return (
         <StompSessionProvider url={SOCKET_URL}>
             <MDBContainer className="py-5">
-                {!state.chatMaximized && !state.showUserList && session?.user && (
+                {/*{!state.chatMaximized && !state.showUserList && session?.user && (*/}
                     <div
                         style={fabStyle}
                         onClick={() =>
@@ -45,7 +45,7 @@ export default function ChatService({projectId}: { projectId: string | undefined
                     >
                         <Fab variant="extended">Live chat</Fab>
                     </div>
-                )}
+                {/*)}*/}
 
                 {state.fetchUserList && session && (
                     <ChatUserList
